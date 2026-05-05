@@ -42,7 +42,7 @@ def _request() -> SolSignRequest:
     return SolSignRequest(
         request_id=b"\x99" * 16,
         sign_data=_legacy_transfer_message(),
-        derivation_path="m/44'/501'/0'/0'",
+        derivation_path="m/44'/501'/0'",
         sign_type=SignType.TRANSACTION,
     )
 

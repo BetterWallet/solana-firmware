@@ -47,3 +47,4 @@ class SolDevice:
 class SolAccountsPayload:
     device: SolDevice
     accounts: list[SolAccount]
+    master_fingerprint: bytes = b"\x00\x00\x00\x00"
