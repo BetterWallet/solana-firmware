@@ -22,6 +22,10 @@ class Wallet:
     def sol_address(self) -> str:
         return self.sol_accounts[0]["public_key"]
 
+    @cached_property
+    def sol_master_fingerprint(self) -> bytes:
+        return _derive.derive_sol_master_fingerprint(self._mnemonic)
+
     def find_sol_account(self, public_key: str):
         for account in self.sol_accounts:
             if account["public_key"] == public_key:
@@ -51,9 +55,9 @@ def _account_index_from_path(path: str) -> int:
     if normalized.startswith("m/"):
         normalized = normalized[2:]
     parts = normalized.split("/")
-    if len(parts) != 4:
+    if len(parts) != 3:
         raise ValueError(f"unsupported derivation path: {path}")
-    if parts[0] != "44'" or parts[1] != "501'" or parts[3] != "0'":
+    if parts[0] != "44'" or parts[1] != "501'":
         raise ValueError(f"unsupported derivation path: {path}")
     account_part = parts[2]
     if not account_part.endswith("'"):

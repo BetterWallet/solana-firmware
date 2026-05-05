@@ -381,10 +381,11 @@ def _build_sol_accounts_payload(wallet: Wallet) -> SolAccountsPayload:
                 public_key=account["public_key"],
                 public_key_bytes=account["public_key_bytes"],
                 bip_path=account["bip_path"],
-                label=f"Account #{account['index'] + 1}",
+                label=f"SOL-{account['index']}",
             )
             for account in exported_accounts
         ],
+        master_fingerprint=wallet.sol_master_fingerprint,
     )
 
 

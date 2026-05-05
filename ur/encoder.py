@@ -53,26 +53,32 @@ def _build_keypath(path_str: str, source_fingerprint: bytes | None = None) -> cb
         components.append(index)
         components.append(hardened)
     keypath = {1: components}
-    if source_fingerprint is not None:
+    if source_fingerprint:
         keypath[2] = int.from_bytes(source_fingerprint, "big")
     return cbor2.CBORTag(304, keypath)
 
 
-def _build_children_keypath() -> cbor2.CBORTag:
-    return cbor2.CBORTag(304, {1: [0, False, [], False]})
+def _account_label(account_path: str, fallback: str | None) -> str:
+    if fallback:
+        return fallback
+    account_index = account_path.rstrip("'").split("/")[-1]
+    return f"SOL-{account_index}"
 
 
-def _build_hdkey_cbor(public_key_bytes: bytes, origin_path: str, source_fingerprint: bytes) -> dict:
-    # For Solana we use raw Ed25519 public key bytes.
-    hdkey = {
+def _build_hdkey_cbor(
+    public_key_bytes: bytes,
+    origin_path: str,
+    label: str | None,
+    source_fingerprint: bytes | None,
+) -> dict:
+    # Keystone's multi-account parser requires a derived key with an origin
+    # path. Marking this as a master key causes the parser to drop the origin.
+    return {
         2: False,  # is_private
         3: public_key_bytes,
-        4: b"\x00" * 32,  # placeholder chain code for compatibility
         6: _build_keypath(origin_path, source_fingerprint),
-        7: _build_children_keypath(),
-        8: 0,
-        9: "Better Wallet",
-        10: "solana.account",
+        9: _account_label(origin_path, label),
+        10: "SOL",
     }
     # #region agent log
     _debug_log(
@@ -125,27 +131,28 @@ def encode_crypto_multi_accounts(payload: SolAccountsPayload, max_fragment_len: 
 
     hdkeys = []
     for account in payload.accounts:
-        # #region agent log
-        _debug_log(
-            "H1,H2,H4",
-            "ur/encoder.py:encode_crypto_multi_accounts:account",
-            "account hdkey fields before CBOR encode",
-            {
-                "public_key_len": len(account.public_key_bytes),
-                "bip_path": account.bip_path,
-                "public_key_prefix_hex": account.public_key_bytes[:4].hex(),
-            },
+        hdkeys.append(
+            cbor2.CBORTag(
+                303,
+                _build_hdkey_cbor(
+                    account.public_key_bytes,
+                    account.bip_path,
+                    account.label,
+                    payload.master_fingerprint,
+                ),
+            )
         )
-        # #endregion
-        hdkeys.append(cbor2.CBORTag(303, _build_hdkey_cbor(account.public_key_bytes, account.bip_path, fingerprint)))
 
-    cbor_bytes = cbor2.dumps(
-        {
-            1: int.from_bytes(fingerprint, "big"),
-            2: hdkeys,
-            3: payload.device.label,
-        }
-    )
+    account_payload = {
+        1: int.from_bytes(payload.master_fingerprint, "big"),
+        2: hdkeys,
+        3: payload.device.label,
+        4: payload.device.id,
+    }
+    if payload.device.fw_version:
+        account_payload[5] = payload.device.fw_version
+
+    cbor_bytes = cbor2.dumps(account_payload)
     ur = UR("crypto-multi-accounts", cbor_bytes)
     parts = _encode_to_parts(ur, max_fragment_len)
     # #region agent log
