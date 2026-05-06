@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Blog from '../../components/Blog.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout
+  title="Blog · Better Wallet Pi"
+  description="Field notes on Solana-first offline signing, Keystone Solana UR flows, and Better Wallet Pi security decisions."
+>
+  <Nav />
+  <main>
+    <section class="relative overflow-hidden border-b border-wire">
+      <div
+        class="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style="background: radial-gradient(ellipse 55% 45% at 70% 0%, rgba(255,107,61,0.07), transparent 68%);"
+        aria-hidden="true"
+      ></div>
+
+      <div class="container-page relative py-20 sm:py-28">
+        <div class="max-w-4xl">
+          <p class="meta-label flex items-center gap-2.5">
+            <span class="led"></span>
+            Blog / Solana-first signing notes
+          </p>
+          <h1 class="display-xl mt-8 text-bone-grad">
+            Notes from
+            <span class="block ital text-signal">the air gap.</span>
+          </h1>
+          <p class="mt-9 max-w-prose text-[17px] leading-[1.7] text-bone-mute">
+            Short, practical essays on why Better Wallet Pi centers Solana,
+            how Keystone UR fits an offline workflow, and where the prototype still
+            needs scrutiny.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Blog />
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,70 @@
+---
+const groups = [
+  {
+    head: 'Software',
+    rows: [
+      { k: 'Language',     v: 'Python 3.11+ · asyncio' },
+      { k: 'sol crypto',   v: 'pynacl · solders' },
+      { k: 'QR transport', v: 'pyzbar · BC-UR (_bc_ur) · cbor2' },
+      { k: 'Display',      v: 'pygame · framebuffer (/dev/fb1)' },
+      { k: 'Camera',       v: 'picamera2 (libcamera)' },
+    ],
+  },
+  {
+    head: 'Standards',
+    rows: [
+      { k: 'sol transport', v: 'Keystone Solana UR · BC-UR' },
+      { k: 'sol request',   v: 'ur:sol-sign-request' },
+      { k: 'sol response',  v: 'ur:sol-signature' },
+      { k: 'mnemonic',      v: 'BIP-39 · 12 words' },
+      { k: 'sol path',      v: 'SLIP-10 · m/44\'/501\'/{i}\'' },
+      { k: 'curve',         v: 'Ed25519' },
+    ],
+  },
+  {
+    head: 'Compatibility',
+    rows: [
+      { k: 'Solflare',  v: 'Keystone Solana UR' },
+      { k: 'Phantom',   v: 'depends on Keystone exposure in app' },
+      { k: 'cluster',   v: 'mainnet-beta · devnet · testnet' },
+      { k: 'air gap',   v: 'camera + display only' },
+      { k: 'license',   v: 'open source · see repo' },
+    ],
+  },
+];
+---
+
+<section class="section relative border-b border-wire">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 07 / Datasheet</p>
+        <h2 class="display-lg mt-4">
+          No mystery.
+          <span class="ital text-bone-mute">No magic.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        A small surface area of well-understood, off-the-shelf components.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-x-px gap-y-px overflow-hidden border border-wire bg-wire md:grid-cols-3">
+      {groups.map(({ head, rows }) => (
+        <div class="flex flex-col bg-ink-1">
+          <div class="border-b border-wire px-6 py-3">
+            <p class="meta-label text-bone">{head}</p>
+          </div>
+          <dl class="flex-1 divide-y divide-wire">
+            {rows.map(({ k, v }) => (
+              <div class="grid grid-cols-[1fr_1.6fr] gap-x-4 px-6 py-3.5">
+                <dt class="font-mono text-[11px] uppercase tracking-meta text-bone-deep">{k}</dt>
+                <dd class="font-mono text-[12.5px] text-bone">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

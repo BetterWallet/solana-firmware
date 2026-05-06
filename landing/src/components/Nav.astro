@@ -1,0 +1,73 @@
+---
+import GitHubStarBadge from './ui/GitHubStarBadge.astro';
+
+const links = [
+  { href: '/',              label: 'Overview' },
+  { href: '/#chains',       label: 'Solana' },
+  { href: '/#architecture', label: 'Architecture' },
+  { href: '/#security',     label: 'Security' },
+  { href: '/docs',          label: 'Docs' },
+  { href: '/blog',          label: 'Blog' },
+  { href: '/#faq',          label: 'FAQ' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-wire bg-ink/85 backdrop-blur-md">
+  <div class="container-page flex h-12 items-center justify-between">
+    <a href="/" class="group flex items-center gap-3" aria-label="Better Wallet Pi home">
+      <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true">
+        <rect x="0.5" y="0.5" width="23" height="23" rx="0" fill="none" stroke="#33E8C8"/>
+        <g fill="#33E8C8">
+          <rect x="4" y="4" width="5" height="5"/>
+          <rect x="15" y="4" width="5" height="5"/>
+          <rect x="4" y="15" width="5" height="5"/>
+          <rect x="11" y="11" width="3" height="3"/>
+          <rect x="15" y="15" width="2" height="2"/>
+          <rect x="18" y="15" width="2" height="2"/>
+          <rect x="15" y="18" width="2" height="2"/>
+          <rect x="18" y="18" width="2" height="2"/>
+        </g>
+      </svg>
+      <span class="font-mono text-[11px] uppercase tracking-meta text-bone">
+        Better&nbsp;Wallet&nbsp;Pi
+        <span class="ml-1 text-bone-deep">·</span>
+        <span class="ml-1 text-bone-mute">v0.1.0</span>
+      </span>
+    </a>
+
+    <nav class="hidden items-center gap-7 lg:flex" aria-label="Primary">
+      {links.map(({ href, label }) => (
+        <a
+          href={href}
+          class="font-mono text-[11px] uppercase tracking-meta text-bone-mute hover:text-bone"
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-5">
+      <GitHubStarBadge />
+      <a
+        href="https://github.com/pettiboy/better-wallet-pi"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden items-center gap-2 border border-wire-hi px-3 py-1.5 font-mono text-[11px] uppercase tracking-meta text-bone hover:border-bone hover:text-bone sm:inline-flex"
+      >
+        Source
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+
+  <nav class="container-page flex gap-5 overflow-x-auto border-t border-wire py-2 lg:hidden" aria-label="Primary mobile">
+    {links.map(({ href, label }) => (
+      <a
+        href={href}
+        class="shrink-0 font-mono text-[10.5px] uppercase tracking-meta text-bone-mute hover:text-bone"
+      >
+        {label}
+      </a>
+    ))}
+  </nav>
+</header>

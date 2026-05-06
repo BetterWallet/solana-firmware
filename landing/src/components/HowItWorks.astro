@@ -1,0 +1,100 @@
+---
+// Architecture diagram — three columns separated by a literal "AIR GAP".
+// The visual is the message: nothing crosses except light.
+---
+
+<section id="architecture" class="section relative border-b border-wire">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 02 / Architecture</p>
+        <h2 class="display-lg mt-4">
+          Two devices.
+          <span class="ital">One photon-thick</span>
+          <span class="text-signal">channel.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        The signing flow is a closed loop with exactly one boundary. Bytes never
+        cross it. Only the camera and the screen do — the payload is always an animated
+        BC-UR fountain QR with a <span class="text-signal">sol-sign-request</span> (or
+        legacy-compatible UR types the wallet emits).
+      </p>
+    </div>
+
+    <!-- diagram -->
+    <div class="mt-16 frame frame-cropped">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr]">
+        <!-- ONLINE column -->
+        <div class="border-b border-wire p-7 lg:border-b-0 lg:border-r">
+          <div class="flex items-center justify-between">
+            <p class="meta-label">Online&nbsp;·&nbsp;Networked</p>
+            <span class="font-mono text-[10px] text-bone-deep">A</span>
+          </div>
+          <p class="display-md mt-4">Your laptop, in the world.</p>
+
+          <ul class="mt-7 space-y-5 text-[13.5px]">
+            <li class="grid grid-cols-[28px_1fr] gap-x-3">
+              <span class="font-mono text-signal">01</span>
+              <p class="text-bone">A Solana wallet builds the unsigned transaction or message and wraps it in a
+                Keystone Solana <span class="text-signal">sign request</span> for the Pi camera.</p>
+            </li>
+            <li class="grid grid-cols-[28px_1fr] gap-x-3">
+              <span class="font-mono text-signal">02</span>
+              <p class="text-bone-mute">It is rendered as animated QR fragments that fountain-decode into a single CBOR payload on the Pi.</p>
+            </li>
+            <li class="grid grid-cols-[28px_1fr] gap-x-3">
+              <span class="font-mono text-signal">06</span>
+              <p class="text-bone-mute">Camera scans the signed result and broadcasts via the chain's normal path.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- AIR GAP column -->
+        <div class="relative flex items-stretch justify-center border-y border-wire bg-ink-1 px-2 py-8 lg:border-x lg:border-y-0 lg:px-12 lg:py-0">
+          <div class="flex flex-col items-center justify-center gap-3 text-center">
+            <p class="meta-label rotate-0 text-warn lg:rotate-180" style="writing-mode: horizontal-tb;">AIR GAP</p>
+            <!-- light arrow forward -->
+            <div class="relative h-px w-32 overflow-hidden bg-wire-hi lg:h-32 lg:w-px">
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-signal to-transparent lg:bg-gradient-to-b lg:from-transparent lg:via-signal lg:to-transparent" style="animation: ur_advance 2.4s linear infinite;"></div>
+            </div>
+            <p class="font-mono text-[10px] uppercase tracking-meta text-bone-mute">
+              UR&nbsp;·&nbsp;light only
+            </p>
+            <!-- light arrow back -->
+            <div class="relative h-px w-32 overflow-hidden bg-wire-hi lg:h-32 lg:w-px">
+              <div class="absolute inset-0 bg-gradient-to-l from-transparent via-warn to-transparent lg:bg-gradient-to-t lg:from-transparent lg:via-warn lg:to-transparent" style="animation: ur_advance 3.2s linear infinite reverse;"></div>
+            </div>
+            <p class="font-mono text-[10px] uppercase tracking-meta text-bone-deep">no packets</p>
+          </div>
+        </div>
+
+        <!-- OFFLINE column -->
+        <div class="p-7">
+          <div class="flex items-center justify-between">
+            <p class="meta-label text-signal">Offline&nbsp;·&nbsp;Air-gapped</p>
+            <span class="font-mono text-[10px] text-bone-deep">B</span>
+          </div>
+          <p class="display-md mt-4">The Pi, in a Faraday calm.</p>
+
+          <ul class="mt-7 space-y-5 text-[13.5px]">
+            <li class="grid grid-cols-[28px_1fr] gap-x-3">
+              <span class="font-mono text-signal">03</span>
+              <p class="text-bone">Camera decodes the QR. UR fragments fountain-reassemble into a structured sign request.</p>
+            </li>
+            <li class="grid grid-cols-[28px_1fr] gap-x-3">
+              <span class="font-mono text-signal">04</span>
+              <p class="text-bone-mute">Human-readable summary on the 3.5″ screen. <span class="text-bone">SIGN</span> or <span class="text-warn">DENY</span> by hand.</p>
+            </li>
+            <li class="grid grid-cols-[28px_1fr] gap-x-3">
+              <span class="font-mono text-signal">05</span>
+              <p class="text-bone-mute"><span class="text-bone">wallet.sol.sign</span> returns a
+                <span class="text-bone">SolSignResult</span> (64-byte Ed25519). The firmware encodes
+                <span class="font-mono text-bone">ur:sol-signature</span> for the return QR.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

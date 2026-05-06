@@ -1,0 +1,31 @@
+---
+// SpecBar — runs across the page like a chip's pin-out diagram.
+
+const specs = [
+  { k: 'sol transport', v: 'Keystone Solana UR'    },
+  { k: 'sol request',   v: 'ur:sol-sign-request'   },
+  { k: 'sol response',  v: 'ur:sol-signature'      },
+  { k: 'derivation',    v: 'm/44\'/501\'/i\''     },
+  { k: 'host',          v: 'Raspberry Pi 4 / CM4'  },
+  { k: 'network',       v: 'none'                  },
+];
+---
+
+<section aria-label="Specifications" class="border-b border-wire bg-ink-1">
+  <div class="container-page">
+    <div class="grid grid-cols-2 divide-y divide-wire sm:grid-cols-3 sm:divide-y-0 lg:grid-cols-6">
+      {specs.map(({ k, v }, i) => (
+        <div class:list={[
+          'flex items-baseline justify-between gap-3 px-3 py-4 sm:flex-col sm:items-start sm:gap-1.5 sm:px-5 sm:py-5',
+          i > 0 && 'sm:border-l sm:border-wire',
+        ]}>
+          <span class="spec-label">/{k}</span>
+          <span class:list={[
+            'font-mono text-[12.5px] tracking-tight',
+            k === 'network' ? 'text-warn' : 'text-bone',
+          ]}>{v}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

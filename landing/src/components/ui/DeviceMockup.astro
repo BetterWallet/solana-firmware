@@ -1,0 +1,235 @@
+---
+// Orthographic technical drawing of the device with leader lines and callouts.
+// Pure SVG + CSS animation. No client JS, no external assets.
+// The aesthetic reference is an engineering manual page / chip datasheet.
+---
+
+<figure class="relative mx-auto w-full max-w-[440px]">
+  <!-- callouts overlay (positioned absolutely around the SVG) -->
+  <figcaption class="sr-only">
+    Orthographic illustration of the Better Wallet Pi device with labelled callouts.
+  </figcaption>
+
+  <!-- top-left coordinate label -->
+  <div class="pointer-events-none absolute -top-3 -left-3 spec-label">FIG · 01</div>
+  <!-- top-right scale label -->
+  <div class="pointer-events-none absolute -top-3 right-0 spec-label">SCALE 1:1</div>
+
+  <svg
+    viewBox="0 0 480 560"
+    xmlns="http://www.w3.org/2000/svg"
+    class="block h-auto w-full"
+    role="img"
+    aria-label="Orthographic illustration of the Better Wallet Pi device"
+  >
+    <defs>
+      <pattern id="micro-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(237,231,216,0.04)" stroke-width="0.5"/>
+      </pattern>
+      <linearGradient id="case" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="#16181B"/>
+        <stop offset="100%" stop-color="#0C0D10"/>
+      </linearGradient>
+      <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="#08090B"/>
+        <stop offset="100%" stop-color="#04050A"/>
+      </linearGradient>
+    </defs>
+
+    <!-- background grid square (drawing canvas feel) -->
+    <rect x="40" y="40" width="400" height="480" fill="url(#micro-grid)"/>
+
+    <!-- corner ticks (drawing crops) -->
+    <g stroke="#33E8C8" stroke-width="1" fill="none">
+      <path d="M40 50 L40 40 L50 40"/>
+      <path d="M430 40 L440 40 L440 50"/>
+      <path d="M40 510 L40 520 L50 520"/>
+      <path d="M430 520 L440 520 L440 510"/>
+    </g>
+
+    <!-- ===================== DEVICE ===================== -->
+    <!-- outer case -->
+    <rect x="100" y="80" width="280" height="400" rx="16"
+          fill="url(#case)" stroke="rgba(237,231,216,0.16)" stroke-width="1"/>
+
+    <!-- inner bezel -->
+    <rect x="120" y="100" width="240" height="290" rx="6"
+          fill="#0A0B0E" stroke="rgba(237,231,216,0.08)"/>
+
+    <!-- screen surface -->
+    <rect x="130" y="110" width="220" height="270" rx="2" fill="url(#screen)"/>
+
+    <!-- screen content: a stylised QR with scan-line -->
+    <g transform="translate(170 142)">
+      <!-- finder patterns -->
+      <g fill="#33E8C8">
+        <rect x="0"   y="0"   width="32" height="32" rx="1"/>
+        <rect x="4"   y="4"   width="24" height="24" fill="#04050A"/>
+        <rect x="10"  y="10"  width="12" height="12"/>
+        <rect x="108" y="0"   width="32" height="32" rx="1"/>
+        <rect x="112" y="4"   width="24" height="24" fill="#04050A"/>
+        <rect x="118" y="10"  width="12" height="12"/>
+        <rect x="0"   y="108" width="32" height="32" rx="1"/>
+        <rect x="4"   y="112" width="24" height="24" fill="#04050A"/>
+        <rect x="10"  y="118" width="12" height="12"/>
+      </g>
+      <!-- module pattern (pseudo-random) -->
+      <g fill="#33E8C8" opacity="0.92">
+        <rect x="40" y="0" width="4" height="4"/><rect x="48" y="0" width="4" height="4"/>
+        <rect x="60" y="0" width="4" height="4"/><rect x="76" y="0" width="4" height="4"/>
+        <rect x="88" y="0" width="4" height="4"/><rect x="100" y="0" width="4" height="4"/>
+        <rect x="40" y="8" width="4" height="4"/><rect x="56" y="8" width="4" height="4"/>
+        <rect x="68" y="8" width="4" height="4"/><rect x="84" y="8" width="4" height="4"/>
+        <rect x="92" y="8" width="4" height="4"/>
+        <rect x="44" y="16" width="4" height="4"/><rect x="60" y="16" width="4" height="4"/>
+        <rect x="72" y="16" width="4" height="4"/><rect x="84" y="16" width="4" height="4"/>
+        <rect x="100" y="16" width="4" height="4"/>
+        <rect x="40" y="24" width="4" height="4"/><rect x="52" y="24" width="4" height="4"/>
+        <rect x="64" y="24" width="4" height="4"/><rect x="80" y="24" width="4" height="4"/>
+        <rect x="96" y="24" width="4" height="4"/>
+
+        <rect x="0"  y="40" width="4" height="4"/><rect x="12" y="40" width="4" height="4"/>
+        <rect x="28" y="40" width="4" height="4"/><rect x="44" y="40" width="4" height="4"/>
+        <rect x="60" y="40" width="4" height="4"/><rect x="76" y="40" width="4" height="4"/>
+        <rect x="92" y="40" width="4" height="4"/><rect x="108" y="40" width="4" height="4"/>
+        <rect x="124" y="40" width="4" height="4"/>
+
+        <rect x="4"  y="48" width="4" height="4"/><rect x="20" y="48" width="4" height="4"/>
+        <rect x="36" y="48" width="4" height="4"/><rect x="52" y="48" width="4" height="4"/>
+        <rect x="68" y="48" width="4" height="4"/><rect x="92" y="48" width="4" height="4"/>
+        <rect x="108" y="48" width="4" height="4"/><rect x="120" y="48" width="4" height="4"/>
+        <rect x="132" y="48" width="4" height="4"/>
+
+        <rect x="0"  y="56" width="4" height="4"/><rect x="16" y="56" width="4" height="4"/>
+        <rect x="32" y="56" width="4" height="4"/><rect x="48" y="56" width="4" height="4"/>
+        <rect x="64" y="56" width="4" height="4"/><rect x="80" y="56" width="4" height="4"/>
+        <rect x="96" y="56" width="4" height="4"/><rect x="112" y="56" width="4" height="4"/>
+        <rect x="128" y="56" width="4" height="4"/>
+
+        <rect x="8"  y="64" width="4" height="4"/><rect x="24" y="64" width="4" height="4"/>
+        <rect x="40" y="64" width="4" height="4"/><rect x="56" y="64" width="4" height="4"/>
+        <rect x="72" y="64" width="4" height="4"/><rect x="88" y="64" width="4" height="4"/>
+        <rect x="104" y="64" width="4" height="4"/><rect x="120" y="64" width="4" height="4"/>
+        <rect x="136" y="64" width="4" height="4"/>
+
+        <rect x="0"  y="72" width="4" height="4"/><rect x="20" y="72" width="4" height="4"/>
+        <rect x="36" y="72" width="4" height="4"/><rect x="48" y="72" width="4" height="4"/>
+        <rect x="68" y="72" width="4" height="4"/><rect x="84" y="72" width="4" height="4"/>
+        <rect x="100" y="72" width="4" height="4"/><rect x="124" y="72" width="4" height="4"/>
+
+        <rect x="12" y="80" width="4" height="4"/><rect x="28" y="80" width="4" height="4"/>
+        <rect x="44" y="80" width="4" height="4"/><rect x="60" y="80" width="4" height="4"/>
+        <rect x="76" y="80" width="4" height="4"/><rect x="92" y="80" width="4" height="4"/>
+        <rect x="108" y="80" width="4" height="4"/><rect x="128" y="80" width="4" height="4"/>
+
+        <rect x="0"  y="88" width="4" height="4"/><rect x="16" y="88" width="4" height="4"/>
+        <rect x="32" y="88" width="4" height="4"/><rect x="56" y="88" width="4" height="4"/>
+        <rect x="72" y="88" width="4" height="4"/><rect x="88" y="88" width="4" height="4"/>
+        <rect x="104" y="88" width="4" height="4"/><rect x="120" y="88" width="4" height="4"/>
+        <rect x="132" y="88" width="4" height="4"/>
+
+        <rect x="8"  y="96" width="4" height="4"/><rect x="28" y="96" width="4" height="4"/>
+        <rect x="44" y="96" width="4" height="4"/><rect x="60" y="96" width="4" height="4"/>
+        <rect x="80" y="96" width="4" height="4"/><rect x="100" y="96" width="4" height="4"/>
+        <rect x="116" y="96" width="4" height="4"/><rect x="132" y="96" width="4" height="4"/>
+
+        <rect x="40" y="108" width="4" height="4"/><rect x="56" y="108" width="4" height="4"/>
+        <rect x="72" y="108" width="4" height="4"/><rect x="88" y="108" width="4" height="4"/>
+        <rect x="104" y="108" width="4" height="4"/><rect x="120" y="108" width="4" height="4"/>
+
+        <rect x="44" y="116" width="4" height="4"/><rect x="60" y="116" width="4" height="4"/>
+        <rect x="80" y="116" width="4" height="4"/><rect x="96" y="116" width="4" height="4"/>
+        <rect x="112" y="116" width="4" height="4"/><rect x="132" y="116" width="4" height="4"/>
+
+        <rect x="40" y="124" width="4" height="4"/><rect x="52" y="124" width="4" height="4"/>
+        <rect x="68" y="124" width="4" height="4"/><rect x="84" y="124" width="4" height="4"/>
+        <rect x="100" y="124" width="4" height="4"/><rect x="116" y="124" width="4" height="4"/>
+        <rect x="128" y="124" width="4" height="4"/>
+
+        <rect x="44" y="132" width="4" height="4"/><rect x="60" y="132" width="4" height="4"/>
+        <rect x="76" y="132" width="4" height="4"/><rect x="92" y="132" width="4" height="4"/>
+        <rect x="108" y="132" width="4" height="4"/><rect x="124" y="132" width="4" height="4"/>
+      </g>
+
+      <!-- moving scan line -->
+      <rect x="-4" y="0" width="148" height="4" fill="#33E8C8" opacity="0.5">
+        <animate attributeName="y" from="0" to="140" dur="3.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0.6;0.6;0" dur="3.6s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+
+    <!-- camera notch -->
+    <circle cx="240" cy="78" r="3.5" fill="#04050A" stroke="rgba(237,231,216,0.18)" stroke-width="1"/>
+
+    <!-- buttons -->
+    <g transform="translate(0 410)">
+      <!-- sign -->
+      <g>
+        <circle cx="170" cy="34" r="22" fill="#0C0D10" stroke="#33E8C8" stroke-width="1.4"/>
+        <circle cx="170" cy="34" r="14" fill="none" stroke="#33E8C8" stroke-width="0.6" opacity="0.5"/>
+        <text x="170" y="38" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" font-weight="500" fill="#33E8C8" letter-spacing="1.5">SIGN</text>
+      </g>
+      <!-- deny -->
+      <g>
+        <circle cx="310" cy="34" r="22" fill="#0C0D10" stroke="#FF6B3D" stroke-width="1.4"/>
+        <circle cx="310" cy="34" r="14" fill="none" stroke="#FF6B3D" stroke-width="0.6" opacity="0.5"/>
+        <text x="310" y="38" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" font-weight="500" fill="#FF6B3D" letter-spacing="1.5">DENY</text>
+      </g>
+    </g>
+
+    <!-- status row -->
+    <g transform="translate(120 470)">
+      <circle cx="0" cy="0" r="3" fill="#33E8C8">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+      <text x="10" y="3" font-family="IBM Plex Mono, monospace" font-size="9" fill="#9B9789" letter-spacing="2">AIR-GAPPED</text>
+      <text x="240" y="3" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B675C" letter-spacing="2" text-anchor="end">BW-PI/0.1.0</text>
+    </g>
+
+    <!-- ===================== CALLOUTS ===================== -->
+    <!-- A · display -->
+    <g stroke="#33E8C8" stroke-width="0.8" fill="#33E8C8">
+      <line x1="240" y1="245" x2="60" y2="155" stroke-dasharray="2 3"/>
+      <circle cx="240" cy="245" r="2.5"/>
+      <text x="56" y="148" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#EDE7D8" letter-spacing="1">A</text>
+    </g>
+    <!-- B · camera -->
+    <g stroke="#33E8C8" stroke-width="0.8" fill="#33E8C8">
+      <line x1="240" y1="78" x2="420" y2="55" stroke-dasharray="2 3"/>
+      <circle cx="240" cy="78" r="2.5"/>
+      <text x="425" y="60" font-family="IBM Plex Mono, monospace" font-size="10" fill="#EDE7D8" letter-spacing="1">B</text>
+    </g>
+    <!-- C · sign -->
+    <g stroke="#33E8C8" stroke-width="0.8" fill="#33E8C8">
+      <line x1="170" y1="468" x2="60" y2="510" stroke-dasharray="2 3"/>
+      <circle cx="170" cy="466" r="2.5"/>
+      <text x="56" y="513" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#EDE7D8" letter-spacing="1">C</text>
+    </g>
+    <!-- D · deny -->
+    <g stroke="#FF6B3D" stroke-width="0.8" fill="#FF6D3D">
+      <line x1="310" y1="468" x2="425" y2="510" stroke-dasharray="2 3"/>
+      <circle cx="310" cy="466" r="2.5"/>
+      <text x="430" y="513" font-family="IBM Plex Mono, monospace" font-size="10" fill="#EDE7D8" letter-spacing="1">D</text>
+    </g>
+  </svg>
+
+  <!-- callout legend -->
+  <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-3 font-mono text-[11px] text-bone-mute sm:grid-cols-4">
+    <div class="flex items-baseline gap-2">
+      <dt class="text-signal">A</dt>
+      <dd>3.5″ SPI display</dd>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <dt class="text-signal">B</dt>
+      <dd>UR-capable camera</dd>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <dt class="text-signal">C</dt>
+      <dd>Confirm · GPIO 17</dd>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <dt class="text-warn">D</dt>
+      <dd>Deny · GPIO 27</dd>
+    </div>
+  </dl>
+</figure>

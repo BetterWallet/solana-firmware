@@ -1,0 +1,60 @@
+---
+// Manifesto block. Replaces the generic three-card "Features" grid with
+// a single editorial typographic statement.
+---
+
+<section id="manifesto" class="section relative overflow-hidden border-b border-wire">
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.4]"
+    style="background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(51,232,200,0.05), transparent 65%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-page relative">
+    <div class="grid items-start gap-y-10 lg:grid-cols-12 lg:gap-x-12">
+      <!-- left rail — section number -->
+      <aside class="lg:col-span-3">
+        <p class="section-no">§ 01 / Doctrine</p>
+        <p class="meta-label mt-3 text-bone">Three rules.</p>
+        <p class="meta-label text-bone-mute">No exceptions.</p>
+      </aside>
+
+      <!-- right column — manifesto -->
+      <div class="lg:col-span-9">
+        <h2 class="display-lg text-bone-grad">
+          Most hardware wallets ship with closed firmware,<br class="hidden md:inline"/>
+          a proprietary chip,
+          <span class="ital text-bone-mute">and a USB cable.</span>
+          <span class="block mt-4 text-signal">This one ships with none of those.</span>
+        </h2>
+
+        <ol class="mt-14 grid gap-px overflow-hidden border border-wire bg-wire md:grid-cols-3">
+          <li class="bg-ink-1 p-7">
+            <p class="section-no">01</p>
+            <h3 class="display-md mt-3">No&nbsp;path in.</h3>
+            <p class="mt-3 font-sans text-[14.5px] leading-[1.6] text-bone-mute">
+              WiFi and Bluetooth are disabled in firmware. There is no USB data path.
+              The device cannot phone home — there is no home to call.
+            </p>
+          </li>
+          <li class="bg-ink-1 p-7">
+            <p class="section-no">02</p>
+            <h3 class="display-md mt-3">Light&nbsp;in. Light&nbsp;out.</h3>
+            <p class="mt-3 font-sans text-[14.5px] leading-[1.6] text-bone-mute">
+              Animated UR fountain-encoded QR carries the request in.
+              A second QR carries the Ed25519 signature out. Nothing else crosses.
+            </p>
+          </li>
+          <li class="bg-ink-1 p-7">
+            <p class="section-no">03</p>
+            <h3 class="display-md mt-3">No&nbsp;mystery&nbsp;chips.</h3>
+            <p class="mt-3 font-sans text-[14.5px] leading-[1.6] text-bone-mute">
+              Every line of the signing path is open-source Python on
+              commodity silicon. Read it, run it, fork it, build it.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>

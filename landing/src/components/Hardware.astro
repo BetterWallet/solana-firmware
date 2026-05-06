@@ -1,0 +1,93 @@
+---
+const parts = [
+  { id: 'PI',  name: 'Raspberry Pi 4',          detail: 'or CM4 (no-wireless) for production', mono: true,  qty: '×1' },
+  { id: 'DSP', name: '3.5″ SPI touchscreen',    detail: '480 × 320 · ADS7846 · tft35a overlay',                  qty: '×1' },
+  { id: 'CAM', name: 'Pi Camera Module',         detail: 'libcamera · ribbon variant recommended',                qty: '×1' },
+  { id: 'BTN', name: 'Momentary push buttons',   detail: 'GPIO 17 (sign) · GPIO 27 (deny)',                       qty: '×2' },
+  { id: 'SD',  name: 'microSD card',             detail: '8 GB · Class 10 minimum',                               qty: '×1' },
+  { id: 'PSU', name: 'USB-C power supply',       detail: '5 V · 3 A · power-only, no data',                        qty: '×1' },
+];
+---
+
+<section id="hardware" class="section relative border-b border-wire bg-ink-1">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 06 / Hardware</p>
+        <h2 class="display-lg mt-4">
+          A reference design.
+          <span class="ital block">Not a product.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        There is no SKU. There is no shipping date. There is a list of
+        commodity parts, an SD-card image, and a repository whose every
+        screw and every line is yours to inspect.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-x-12 gap-y-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <!-- BOM table — feels like a real datasheet -->
+      <div class="frame frame-cropped">
+        <div class="flex items-center justify-between border-b border-wire bg-ink-2 px-4 py-2.5">
+          <p class="meta-label text-bone">BILL OF MATERIALS</p>
+          <p class="meta-label text-bone-deep">approx&nbsp;US$&nbsp;80–120</p>
+        </div>
+        <table class="w-full border-collapse">
+          <thead class="border-b border-wire">
+            <tr class="text-left">
+              <th class="meta-label py-2.5 pl-5 pr-3 font-normal text-bone-deep">REF</th>
+              <th class="meta-label py-2.5 pr-3 font-normal text-bone-deep">PART</th>
+              <th class="meta-label py-2.5 pr-3 font-normal text-bone-deep">DETAIL</th>
+              <th class="meta-label py-2.5 pr-5 font-normal text-bone-deep text-right">QTY</th>
+            </tr>
+          </thead>
+          <tbody>
+            {parts.map(({ id, name, detail, qty, mono }, i) => (
+              <tr class={i < parts.length - 1 ? 'border-b border-wire' : ''}>
+                <td class="py-3 pl-5 pr-3 font-mono text-[11px] text-signal">{id}</td>
+                <td class:list={['py-3 pr-3 text-[14px]', mono && 'font-mono']}>{name}</td>
+                <td class="py-3 pr-3 text-[13px] text-bone-mute">{detail}</td>
+                <td class="py-3 pr-5 font-mono text-[12px] text-bone text-right">{qty}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- right column — what you build with this -->
+      <div class="space-y-7">
+        <div class="frame p-6">
+          <p class="meta-label text-bone-deep">OUTCOME</p>
+          <h3 class="display-md mt-2">Hardware whose every screw is yours to inspect.</h3>
+          <p class="mt-3 font-sans text-[14px] leading-[1.65] text-bone-mute">
+            Source the parts. Flash the SD card. Solder two buttons. You
+            now hold a hardware wallet whose entire trust chain you can
+            audit, fork, and rebuild from scratch.
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <a
+              href="https://github.com/pettiboy/better-wallet-pi#readme"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary"
+            >
+              Build instructions
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="border-l-2 border-warn pl-4">
+          <p class="spec-label text-warn">A note, plainly</p>
+          <p class="mt-2 text-[13px] leading-[1.6] text-bone-mute">
+            This is a Phase 1 prototype. The architecture is built for the
+            right reasons, but no external audit has been performed and
+            the code has not been hardened against side-channel attacks.
+            Use a testnet account before anything else.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

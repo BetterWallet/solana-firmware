@@ -1,0 +1,64 @@
+---
+const faqs = [
+  {
+    q: 'Is this ready to hold real funds today?',
+    a: 'No, and we will not pretend otherwise. Better Wallet Pi is a Phase 1 Python prototype. Use Solana devnet or a disposable key first. The architecture is built for the right reasons, but no external audit has been performed and the code has not been hardened against side-channel attacks.',
+  },
+  {
+    q: 'Which Solana wallets does it work with?',
+    a: 'Solflare supports the Keystone Solana UR flow this firmware implements — pair it as a Keystone-class hardware signer and use animated `ur:sol-sign-request` / `ur:sol-signature` QRs. Phantom may work once the extension exposes the same Keystone Solana path; until then, treat Phantom as experimental.',
+  },
+  {
+    q: 'Why center Solana?',
+    a: 'Solana already uses Ed25519 at standard BIP-44 paths, and Keystone\'s Solana UR encoding gives us an open, QR-native request/response framing that maps cleanly onto Pi camera + display. The air gap stays visible: the hot machine prepares and broadcasts; the cold Pi parses, verifies, and signs.',
+  },
+  {
+    q: 'How is this different from a Ledger or Trezor?',
+    a: 'Ledger and Trezor ship sealed devices with proprietary firmware and a USB cable into a host computer. Better Wallet Pi is open hardware you build yourself, has no USB data path at all, and has no closed components in the signing path.',
+  },
+  {
+    q: 'Why a Raspberry Pi?',
+    a: 'It is cheap, widely available, well documented, and auditable. The CM4 no-wireless variant is recommended for production builds because the network silicon is physically absent — not just disabled in software.',
+  },
+  {
+    q: 'Has the code been audited?',
+    a: 'Not externally. Open source means you can audit it yourself — and you should, before trusting it with non-trivial value. The codebase is small and the security boundaries are explicit.',
+  },
+  {
+    q: 'Can I contribute?',
+    a: 'Yes — issues and pull requests welcome on GitHub. The project follows one strict architectural rule: only state/machine.py may import wallet/. Read CONTEXT.md before sending a PR.',
+  },
+];
+---
+
+<section id="faq" class="section relative border-b border-wire">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 08 / Questions</p>
+        <h2 class="display-lg mt-4">
+          The uncomfortable answers,
+          <span class="ital text-bone-mute">first.</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="mt-14 divide-y divide-wire border-y border-wire">
+      {faqs.map(({ q, a }, i) => (
+        <details class="group">
+          <summary class="grid cursor-pointer list-none grid-cols-[40px_1fr_auto] items-baseline gap-x-5 py-6 pr-2 transition-colors hover:bg-wire-lo">
+            <span class="font-mono text-[11px] uppercase tracking-meta text-bone-deep">{String(i + 1).padStart(2, '0')}</span>
+            <span class="display-md text-bone group-hover:text-bone">{q}</span>
+            <svg class="h-4 w-4 shrink-0 self-center text-bone-mute transition-transform duration-200 group-open:rotate-45" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </summary>
+          <div class="grid grid-cols-[40px_1fr_auto] gap-x-5 pb-7">
+            <span></span>
+            <p class="max-w-prose text-[14.5px] leading-[1.7] text-bone-mute">{a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

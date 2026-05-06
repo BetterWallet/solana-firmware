@@ -1,0 +1,54 @@
+---
+import { posts } from '../data/blog';
+---
+
+<section id="blog" class="section relative overflow-hidden border-b border-wire">
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.35]"
+    style="background: radial-gradient(ellipse 55% 45% at 72% 25%, rgba(255,107,61,0.06), transparent 65%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-page relative">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">Journal</p>
+        <h2 class="display-lg mt-4">
+          Field notes for
+          <span class="ital text-bone-mute">Solana-first offline signing.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        Product notes, security decisions, and build logs for the wallet. Solana
+        and Keystone UR framing are the through-line because they keep the offline
+        air-gapped flow.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-x-px gap-y-px overflow-hidden border border-wire bg-wire lg:grid-cols-3">
+      {posts.map(({ slug, no, category, title, dek, date }) => (
+        <article class="flex min-h-[520px] flex-col bg-ink-1 p-7">
+          <header>
+            <div class="flex items-center justify-between">
+              <p class="font-mono text-[11px] uppercase tracking-meta text-signal">{category}</p>
+              <p class="font-mono text-[10.5px] uppercase tracking-meta text-bone-deep">{date}</p>
+            </div>
+            <h3 class="display-md mt-6">
+              <a href={`/blog/${slug}`} class="hover:text-signal">{title}</a>
+            </h3>
+            <p class="mt-4 text-[15px] leading-[1.65] text-bone">{dek}</p>
+          </header>
+
+          <footer class="mt-auto pt-8">
+            <a
+              href={`/blog/${slug}`}
+              class="font-mono text-[11px] uppercase tracking-meta text-bone-mute hover:text-bone"
+            >
+              Read post {no} ↗
+            </a>
+          </footer>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

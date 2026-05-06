@@ -1,0 +1,106 @@
+---
+const cols = [
+  {
+    heading: 'Repository',
+    links: [
+      { label: 'GitHub',  href: 'https://github.com/pettiboy/better-wallet-pi' },
+      { label: 'Issues',  href: 'https://github.com/pettiboy/better-wallet-pi/issues' },
+      { label: 'README',  href: 'https://github.com/pettiboy/better-wallet-pi#readme' },
+      { label: 'Source · wallet', href: 'https://github.com/pettiboy/better-wallet-pi/blob/master/wallet/__init__.py' },
+    ],
+  },
+  {
+    heading: 'References',
+    links: [
+      { label: 'BC-UR',        href: 'https://github.com/BlockchainCommons/Research/blob/master/papers/bcr-2020-006-ur-registry.md' },
+      { label: 'Keystone UR',  href: 'https://github.com/KeystoneHQ/ur-registry' },
+      { label: 'SLIP-10',      href: 'https://github.com/satoshilabs/slips/blob/master/slip-0010.md' },
+      { label: 'BIP-39',       href: 'https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki' },
+      { label: 'Solana docs',  href: 'https://docs.solanalabs.com/' },
+    ],
+  },
+  {
+    heading: 'Site',
+    links: [
+      { label: 'Overview',     href: '/' },
+      { label: 'Solana flow', href: '/#chains' },
+      { label: 'Architecture', href: '/#architecture' },
+      { label: 'Security',     href: '/#security' },
+      { label: 'Docs',         href: '/docs' },
+      { label: 'Blog',         href: '/blog' },
+      { label: 'FAQ',          href: '/#faq' },
+    ],
+  },
+];
+
+const year = new Date().getFullYear();
+const built = new Date().toISOString().slice(0, 10);
+---
+
+<footer class="bg-ink-1">
+  <div class="container-page py-20">
+    <!-- top: dense info grid -->
+    <div class="grid gap-12 md:grid-cols-[1.6fr_repeat(3,1fr)]">
+      <div>
+        <div class="flex items-center gap-3">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="23" height="23" fill="none" stroke="#33E8C8"/>
+            <g fill="#33E8C8">
+              <rect x="4" y="4" width="5" height="5"/>
+              <rect x="15" y="4" width="5" height="5"/>
+              <rect x="4" y="15" width="5" height="5"/>
+              <rect x="11" y="11" width="3" height="3"/>
+              <rect x="15" y="15" width="2" height="2"/>
+              <rect x="18" y="15" width="2" height="2"/>
+              <rect x="15" y="18" width="2" height="2"/>
+              <rect x="18" y="18" width="2" height="2"/>
+            </g>
+          </svg>
+          <span class="font-mono text-[11px] uppercase tracking-meta text-bone">
+            Better Wallet Pi
+          </span>
+        </div>
+        <p class="mt-5 max-w-xs font-sans text-[14px] leading-[1.65] text-bone-mute">
+          An open-source, air-gapped Solana hardware wallet — built on a Raspberry&nbsp;Pi.
+        </p>
+
+        <!-- specimen -->
+        <p class="mt-8 max-w-xs font-display text-[28px] leading-none text-bone-deep">
+          <span class="ital">Aa</span> Bb Cc 0123
+        </p>
+        <p class="mt-2 font-mono text-[10.5px] uppercase tracking-meta text-bone-deep">
+          Set in Instrument Serif &amp; IBM Plex
+        </p>
+      </div>
+
+      {cols.map(({ heading, links }) => (
+        <div>
+          <p class="meta-label text-bone-deep">{heading}</p>
+          <ul class="mt-5 space-y-2.5">
+            {links.map(({ label, href }) => (
+              <li>
+                <a
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  class="font-mono text-[12px] text-bone-mute hover:text-bone"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- bottom: colophon strip -->
+    <div class="mt-16 flex flex-col gap-4 border-t border-wire pt-6 font-mono text-[11px] uppercase tracking-meta text-bone-deep sm:flex-row sm:items-baseline sm:justify-between">
+      <p>© {year} Better Wallet Pi contributors</p>
+      <p class="text-bone-mute">
+        Open-source reference design. Not a product. Not financial advice.
+      </p>
+      <p>Built {built}</p>
+    </div>
+  </div>
+</footer>

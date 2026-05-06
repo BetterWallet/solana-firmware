@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { posts } from '../../data/blog';
+
+export function getStaticPaths() {
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<Layout
+  title={`${post.title} · Better Wallet Pi`}
+  description={post.dek}
+>
+  <Nav />
+  <main>
+    <article class="relative overflow-hidden border-b border-wire">
+      <div
+        class="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style="background: radial-gradient(ellipse 55% 45% at 70% 0%, rgba(51,232,200,0.08), transparent 68%);"
+        aria-hidden="true"
+      ></div>
+
+      <div class="container-page relative py-20 sm:py-28">
+        <div class="grid gap-y-10 lg:grid-cols-12 lg:gap-x-12">
+          <aside class="lg:col-span-3">
+            <p class="section-no">Post {post.no}</p>
+            <p class="meta-label mt-3 text-signal">{post.category}</p>
+            <p class="meta-label mt-1 text-bone-deep">{post.date}</p>
+          </aside>
+
+          <div class="lg:col-span-8">
+            <h1 class="display-lg text-bone-grad">{post.title}</h1>
+            <p class="mt-8 max-w-3xl text-[18px] leading-[1.7] text-bone">
+              {post.dek}
+            </p>
+
+            <div class="mt-12 space-y-7 border-t border-wire pt-10 text-[16px] leading-[1.85] text-bone-mute">
+              {post.body.map((paragraph) => (
+                <p>{paragraph}</p>
+              ))}
+            </div>
+
+            <div class="mt-12 flex flex-wrap gap-3 border-t border-wire pt-8">
+              <a href="/blog" class="btn-ghost">All posts</a>
+              <a href="/docs" class="btn-primary">Read docs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>

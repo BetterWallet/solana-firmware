@@ -1,0 +1,74 @@
+---
+const cornerstones = [
+  {
+    no: '05.1',
+    title: 'No WiFi. No Bluetooth. No USB data.',
+    body: 'Network silicon is disabled at the firmware level via the Raspberry Pi config overlay. There is no driver path to enable it from userspace. CM4 no-wireless variants remove the silicon entirely.',
+    pin: 'config.txt :: dtoverlay=disable-wifi,disable-bt',
+  },
+  {
+    no: '05.2',
+    title: 'PIN-stretched encrypted mnemonic.',
+    body: 'The keystore stores the BIP-39 mnemonic, encrypted with AES-256-GCM keyed by a scrypt-stretched PIN. The mnemonic is the single source of truth — an Ed25519 signing key for Solana is re-derived from it on unlock via SLIP-10. No private key persists on disk.',
+    pin: 'wallet/keystore.py · AES-GCM',
+  },
+  {
+    no: '05.3',
+    title: 'BIP-39 recovery, day one.',
+    body: 'A 12-word mnemonic is generated on first boot and shown once for offline backup. Solana accounts derive at m/44\'/501\'/i\' (SLIP-10 Ed25519). One backup seeds every signer slot the device exposes.',
+    pin: 'wallet/derive.py · BIP-32 + SLIP-10',
+  },
+  {
+    no: '05.4',
+    title: 'Hard module isolation.',
+    body: 'Only state/machine.py is permitted to import wallet/. The boundary is checked architecturally. Adding networking, USB, or Bluetooth code anywhere is a project-level rule, not a convention.',
+    pin: 'state/machine.py · sole importer',
+  },
+  {
+    no: '05.5',
+    title: 'Fully auditable.',
+    body: 'Every line of the signing path is open-source Python: derivation in wallet/derive.py, UR typing in ur/, and Ed25519 signatures via pynacl. No closed firmware. No secure element you have to take on faith. Read it before you trust it.',
+    pin: 'github.com/pettiboy/better-wallet-pi',
+  },
+];
+---
+
+<section id="security" class="section relative border-b border-wire">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 05 / Cornerstones</p>
+        <h2 class="display-lg mt-4">
+          Claims are easy to write.
+          <span class="ital block">These are the structural decisions</span>
+          <span class="text-signal">that make them hold.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        We don't ask you to trust the marketing. We ask you to read the file
+        path next to each claim, and verify it for yourself.
+      </p>
+    </div>
+
+    <ol class="mt-14 divide-y divide-wire border-y border-wire">
+      {cornerstones.map(({ no, title, body, pin }) => (
+        <li class="grid grid-cols-1 gap-x-10 gap-y-3 py-8 lg:grid-cols-12">
+          <div class="lg:col-span-2">
+            <p class="font-mono text-[11px] uppercase tracking-meta text-bone-deep">§ {no}</p>
+          </div>
+          <div class="lg:col-span-7">
+            <h3 class="display-md">{title}</h3>
+            <p class="mt-3 max-w-prose font-sans text-[14.5px] leading-[1.65] text-bone-mute">
+              {body}
+            </p>
+          </div>
+          <div class="self-start lg:col-span-3">
+            <div class="border-l border-signal/60 pl-3 font-mono text-[11.5px] leading-snug text-bone-mute">
+              {pin}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
