@@ -1,6 +1,6 @@
 # Better Wallet Pi — Landing Page
 
-Static marketing site for [better-wallet-pi](https://github.com/pettiboy/better-wallet-pi). Built with [Astro](https://astro.build) + [Tailwind CSS](https://tailwindcss.com), deployed to Firebase Hosting.
+Static marketing site for [solana-firmware](https://github.com/BetterWallet/solana-firmware). Built with [Astro](https://astro.build) + [Tailwind CSS](https://tailwindcss.com), deployed to Firebase Hosting.
 
 ## Develop
 
