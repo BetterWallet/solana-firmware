@@ -2,32 +2,11 @@
 
 import cbor2
 import hashlib
-import json
-import time
 from _bc_ur.ur import UR
 from _bc_ur.ur_encoder import UREncoder as _UREncoder
 
 from config import MAX_FRAGMENT_LEN
 from ur.types import SolAccountsPayload, SolSignature
-
-_DEBUG_LOG_PATH = "/home/pi/solana-firmware/.cursor/debug-471b5b.log"
-
-
-def _debug_log(hypothesis_id: str, location: str, message: str, data: dict) -> None:
-    payload = {
-        "sessionId": "471b5b",
-        "runId": "pre-fix",
-        "hypothesisId": hypothesis_id,
-        "location": location,
-        "message": message,
-        "data": data,
-        "timestamp": int(time.time() * 1000),
-    }
-    try:
-        with open(_DEBUG_LOG_PATH, "a", encoding="utf-8") as f:
-            f.write(json.dumps(payload, separators=(",", ":")) + "\n")
-    except Exception:
-        pass
 
 
 def encode_sol_signature(sig: SolSignature, max_fragment_len: int = MAX_FRAGMENT_LEN) -> list[str]:
@@ -80,36 +59,9 @@ def _build_hdkey_cbor(
         9: _account_label(origin_path, label),
         10: "SOL",
     }
-    # #region agent log
-    _debug_log(
-        "H1",
-        "ur/encoder.py:_build_hdkey_cbor",
-        "built hdkey map (master flag omitted for derived key)",
-        {
-            "has_is_master_key": 1 in hdkey,
-            "is_private": hdkey.get(2),
-            "has_origin": 6 in hdkey,
-            "source_fingerprint_hex": source_fingerprint.hex(),
-        },
-    )
-    # #endregion
-    return hdkey
 
 
 def encode_crypto_multi_accounts(payload: SolAccountsPayload, max_fragment_len: int = MAX_FRAGMENT_LEN) -> list[str]:
-    # #region agent log
-    _debug_log(
-        "H5",
-        "ur/encoder.py:encode_crypto_multi_accounts:start",
-        "building crypto-multi-accounts payload",
-        {
-            "account_count": len(payload.accounts),
-            "device_label": payload.device.label,
-            "max_fragment_len": max_fragment_len,
-        },
-    )
-    # #endregion
-
     seed_account = payload.accounts[0] if payload.accounts else None
     fingerprint = b"\x00\x00\x00\x01"
     if seed_account is not None:
@@ -117,17 +69,6 @@ def encode_crypto_multi_accounts(payload: SolAccountsPayload, max_fragment_len: 
         fingerprint = digest[:4]
         if fingerprint == b"\x00\x00\x00\x00":
             fingerprint = b"\x00\x00\x00\x01"
-    # #region agent log
-    _debug_log(
-        "H6,H7",
-        "ur/encoder.py:encode_crypto_multi_accounts:fingerprint",
-        "computed account export fingerprint",
-        {
-            "fingerprint_hex": fingerprint.hex(),
-            "fingerprint_is_zero": fingerprint == b"\x00\x00\x00\x00",
-        },
-    )
-    # #endregion
 
     hdkeys = []
     for account in payload.accounts:
@@ -155,20 +96,6 @@ def encode_crypto_multi_accounts(payload: SolAccountsPayload, max_fragment_len: 
     cbor_bytes = cbor2.dumps(account_payload)
     ur = UR("crypto-multi-accounts", cbor_bytes)
     parts = _encode_to_parts(ur, max_fragment_len)
-    # #region agent log
-    _debug_log(
-        "H1,H3,H5",
-        "ur/encoder.py:encode_crypto_multi_accounts:result",
-        "encoded crypto-multi-accounts ur parts",
-        {
-            "master_fingerprint": int.from_bytes(fingerprint, "big"),
-            "master_fingerprint_hex": fingerprint.hex(),
-            "parts_count": len(parts),
-            "first_part_prefix": parts[0][:40] if parts else "",
-            "cbor_size": len(cbor_bytes),
-        },
-    )
-    # #endregion
     return parts
 
 
