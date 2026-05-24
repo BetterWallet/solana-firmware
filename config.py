@@ -38,7 +38,7 @@ DEVICE_LABEL = "Better Wallet"
 PIN_SCRYPT_N = 2**15      # 2**18 exceeds OpenSSL memory limit on Pi 4; never below 2**14
 PIN_SCRYPT_R = 8
 PIN_SCRYPT_P = 1
-SOL_DERIVATION_PATH_TEMPLATE = "m/44'/501'/{i}'/0'"
+SOL_DERIVATION_PATH_TEMPLATE = "m/44'/501'/{i}'"
 SOL_ACCOUNT_COUNT = 5
 QR_DISPLAY_FPS = 5        # animated QR frame rate on result screen
 QR_DISPLAY_SIZE = 280     # pixel dimension for QR codes rendered on screen
@@ -51,4 +51,14 @@ SHOW_TOUCH_CURSOR = False
 # - "x11": read pointer/button from X11 (respects xorg touchscreen calibration)
 # - "evdev": read raw /dev/input events directly
 # - "auto": try X11 first, then fallback to evdev
-TOUCH_INPUT_BACKEND = "x11"
+TOUCH_INPUT_BACKEND = "evdev"
+
+# Touch calibration (translated from /etc/X11/xorg.conf.d/99-calibration.conf)
+# Calibration "227 3936 3880 268", SwapAxes=1, InvertY=true
+# With swap: ABS_Y drives screen X, ABS_X drives screen Y
+# InvertY flips the Y mapping so 268→top, 3880→bottom
+TOUCH_SWAP_AXES = True
+TOUCH_CAL_X_MIN = 227   # ABS_Y value at screen left  (x=0)
+TOUCH_CAL_X_MAX = 3936  # ABS_Y value at screen right (x=max)
+TOUCH_CAL_Y_MIN = 268   # ABS_X value at screen top   (y=0,   after InvertY)
+TOUCH_CAL_Y_MAX = 3880  # ABS_X value at screen bottom (y=max, after InvertY)

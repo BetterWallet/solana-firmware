@@ -17,7 +17,7 @@ with browser wallets over animated QR codes only.
 2. Pi camera scans and decodes UR fragments.
 3. Pi renders human-readable transaction/message details.
 4. User confirms on hardware buttons.
-5. Pi signs offline with Ed25519 at `m/44'/501'/{i}'/0'`.
+5. Pi signs offline with Ed25519 at `m/44'/501'/{i}'`.
 6. Pi shows animated `ur:sol-signature` QR.
 7. Wallet scans signature QR and submits.
 

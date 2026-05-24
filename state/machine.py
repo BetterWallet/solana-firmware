@@ -8,7 +8,6 @@ import asyncio
 import json
 import logging
 from pathlib import Path
-import time
 import uuid
 
 from config import (
@@ -33,24 +32,6 @@ import wallet.keystore as keystore
 from wallet import Wallet
 
 log = logging.getLogger(__name__)
-_DEBUG_LOG_PATH = "/home/pi/solana-firmware/.cursor/debug-471b5b.log"
-
-
-def _debug_log(hypothesis_id: str, location: str, message: str, data: dict) -> None:
-    payload = {
-        "sessionId": "471b5b",
-        "runId": "pre-fix",
-        "hypothesisId": hypothesis_id,
-        "location": location,
-        "message": message,
-        "data": data,
-        "timestamp": int(time.time() * 1000),
-    }
-    try:
-        with open(_DEBUG_LOG_PATH, "a", encoding="utf-8") as f:
-            f.write(json.dumps(payload, separators=(",", ":")) + "\n")
-    except Exception:
-        pass
 
 
 async def run(
@@ -310,17 +291,6 @@ async def _handle_show_import(
     qr_frames = ur_encoder.encode_crypto_multi_accounts(
         _build_sol_accounts_payload(wallet),
     )
-    # #region agent log
-    _debug_log(
-        "H5",
-        "state/machine.py:_handle_show_import",
-        "rendering import QR frames",
-        {
-            "frames_count": len(qr_frames),
-            "first_frame_prefix": qr_frames[0][:40] if qr_frames else "",
-        },
-    )
-    # #endregion
     await render_queue.put(RenderEvent.result(qr_frames))
     await event_queue.get()
     return State.IDLE
@@ -359,18 +329,6 @@ async def _collect_pin(event_queue: asyncio.Queue, render_queue: asyncio.Queue) 
 
 def _build_sol_accounts_payload(wallet: Wallet) -> SolAccountsPayload:
     device_info = _load_or_create_device_metadata()
-    exported_accounts = wallet.sol_accounts[:1]
-    # #region agent log
-    _debug_log(
-        "H8",
-        "state/machine.py:_build_sol_accounts_payload",
-        "building account export payload",
-        {
-            "exported_accounts": len(exported_accounts),
-            "total_wallet_accounts": len(wallet.sol_accounts),
-        },
-    )
-    # #endregion
     return SolAccountsPayload(
         device=SolDevice(
             id=device_info["id"],
@@ -381,10 +339,11 @@ def _build_sol_accounts_payload(wallet: Wallet) -> SolAccountsPayload:
                 public_key=account["public_key"],
                 public_key_bytes=account["public_key_bytes"],
                 bip_path=account["bip_path"],
-                label=f"Account #{account['index'] + 1}",
+                label=f"SOL-{account['index']}",
             )
-            for account in exported_accounts
+            for account in wallet.sol_accounts
         ],
+        master_fingerprint=wallet.sol_master_fingerprint,
     )
 
 

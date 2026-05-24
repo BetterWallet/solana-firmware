@@ -20,6 +20,11 @@ from config import (
     SCAN_PREVIEW_ENABLED,
     SHOW_TOUCH_CURSOR,
     TOUCH_INPUT_BACKEND,
+    TOUCH_CAL_X_MAX,
+    TOUCH_CAL_X_MIN,
+    TOUCH_CAL_Y_MAX,
+    TOUCH_CAL_Y_MIN,
+    TOUCH_SWAP_AXES,
 )
 from state.states import ButtonEvent, PINEvent
 
@@ -122,10 +127,11 @@ def _find_mouse_device():
     return None
 
 
-def _scale_axis(value: int, src_max: int, dst_max: int) -> int:
-    if src_max <= 0 or dst_max <= 0:
+def _scale_axis(value: int, src_min: int, src_max: int, dst_max: int) -> int:
+    src_range = src_max - src_min
+    if src_range == 0 or dst_max <= 0:
         return 0
-    return max(0, min(dst_max, int(value * dst_max / src_max)))
+    return max(0, min(dst_max, int((value - src_min) * dst_max / src_range)))
 
 
 def _handle_click(pos: tuple[int, int], state: dict, event_queue: asyncio.Queue):
@@ -306,8 +312,8 @@ async def display_loop(render_queue: asyncio.Queue, event_queue: asyncio.Queue, 
                 pointer = root.query_pointer()
                 px = max(0, min(x11_w - 1, int(pointer.root_x)))
                 py = max(0, min(x11_h - 1, int(pointer.root_y)))
-                sx = _scale_axis(px, x11_w - 1, DISPLAY_WIDTH - 1)
-                sy = _scale_axis(py, x11_h - 1, DISPLAY_HEIGHT - 1)
+                sx = _scale_axis(px, 0, x11_w - 1, DISPLAY_WIDTH - 1)
+                sy = _scale_axis(py, 0, x11_h - 1, DISPLAY_HEIGHT - 1)
 
                 if SHOW_TOUCH_CURSOR:
                     state["cursor"] = (sx, sy)
@@ -346,20 +352,12 @@ async def display_loop(render_queue: asyncio.Queue, event_queue: asyncio.Queue, 
         log.info("touch_loop started — backend=evdev path=%s name=%s", dev_path, dev.name)
 
         raw_x, raw_y = 0, 0
-        try:
-            abs_x = dev.absinfo(ecodes.ABS_X)
-            raw_x_max = abs_x.max if abs_x and abs_x.max > 0 else _TOUCH_MAX_X
-        except Exception:
-            raw_x_max = _TOUCH_MAX_X
-        try:
-            abs_y = dev.absinfo(ecodes.ABS_Y)
-            raw_y_max = abs_y.max if abs_y and abs_y.max > 0 else _TOUCH_MAX_Y
-        except Exception:
-            raw_y_max = _TOUCH_MAX_Y
 
         def _touch_to_screen() -> tuple[int, int]:
-            sx = _scale_axis(raw_x, raw_x_max, DISPLAY_WIDTH - 1)
-            sy = _scale_axis(raw_y, raw_y_max, DISPLAY_HEIGHT - 1)
+            ax = raw_y if TOUCH_SWAP_AXES else raw_x
+            ay = raw_x if TOUCH_SWAP_AXES else raw_y
+            sx = _scale_axis(ax, TOUCH_CAL_X_MIN, TOUCH_CAL_X_MAX, DISPLAY_WIDTH - 1)
+            sy = _scale_axis(ay, TOUCH_CAL_Y_MIN, TOUCH_CAL_Y_MAX, DISPLAY_HEIGHT - 1)
             return sx, sy
 
         async for event in dev.async_read_loop():

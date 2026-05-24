@@ -9,7 +9,7 @@ try:
     from config import SOL_ACCOUNT_COUNT, SOL_DERIVATION_PATH_TEMPLATE
 except ImportError:
     SOL_ACCOUNT_COUNT = 5
-    SOL_DERIVATION_PATH_TEMPLATE = "m/44'/501'/{i}'/0'"
+    SOL_DERIVATION_PATH_TEMPLATE = "m/44'/501'/{i}'"
 
 
 _B58_ALPHABET = b"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -39,18 +39,39 @@ def _slip10_ckd_priv(parent_key: bytes, parent_chain_code: bytes, index: int) ->
     return digest[:32], digest[32:]
 
 
-def _derive_private_key(mnemonic: str, index: int) -> bytes:
-    """Derive ed25519 private key for m/44'/501'/{index}'/0'."""
+def _parse_hardened_path(path: str) -> list[int]:
+    normalized = path.strip()
+    if normalized.startswith("m/"):
+        normalized = normalized[2:]
+    parts = [part for part in normalized.split("/") if part]
+    indexes = []
+    for part in parts:
+        if not part.endswith("'"):
+            raise ValueError(f"unsupported non-hardened Solana derivation path: {path}")
+        index = int(part[:-1])
+        if index < 0 or index >= _HARDENED:
+            raise ValueError(f"invalid derivation index in path: {path}")
+        indexes.append(index + _HARDENED)
+    return indexes
+
+
+def _master_key_and_chain_code(mnemonic: str) -> tuple[bytes, bytes]:
     seed_bytes = _MNEMO.to_seed(mnemonic, passphrase="")
-    key, chain_code = _slip10_master_key(seed_bytes)
-    for hardened in (44, 501, index, 0):
-        key, chain_code = _slip10_ckd_priv(key, chain_code, hardened + _HARDENED)
+    return _slip10_master_key(seed_bytes)
+
+
+def _derive_private_key(mnemonic: str, index: int, path: str | None = None) -> bytes:
+    """Derive an Ed25519 private key for the configured Solana path."""
+    key, chain_code = _master_key_and_chain_code(mnemonic)
+    derivation_path = path or SOL_DERIVATION_PATH_TEMPLATE.format(i=index)
+    for hardened_index in _parse_hardened_path(derivation_path):
+        key, chain_code = _slip10_ckd_priv(key, chain_code, hardened_index)
     return key
 
 
-def derive_sol_signing_key(mnemonic: str, index: int = 0) -> SigningKey:
-    """Derive nacl SigningKey for Solana path m/44'/501'/{index}'/0'."""
-    private_key_bytes = _derive_private_key(mnemonic, index=index)
+def derive_sol_signing_key(mnemonic: str, index: int = 0, path: str | None = None) -> SigningKey:
+    """Derive nacl SigningKey for the configured Solana account path."""
+    private_key_bytes = _derive_private_key(mnemonic, index=index, path=path)
     return SigningKey(private_key_bytes)
 
 
@@ -64,6 +85,15 @@ def derive_sol_address(mnemonic: str, index: int = 0) -> str:
     """Derive base58 Solana address (ed25519 public key)."""
     public_key_bytes = derive_sol_public_key_bytes(mnemonic, index=index)
     return _to_b58(public_key_bytes)
+
+
+def derive_sol_master_fingerprint(mnemonic: str) -> bytes:
+    """Return a stable 4-byte fingerprint for Keystone-compatible account export."""
+    master_key, _chain_code = _master_key_and_chain_code(mnemonic)
+    master_public_key = SigningKey(master_key).verify_key.encode()
+    sha = hashlib.sha256(master_public_key).digest()
+    ripe = hashlib.new("ripemd160", sha).digest()
+    return ripe[:4]
 
 
 def sol_bytes_to_address(public_key_bytes: bytes) -> str:

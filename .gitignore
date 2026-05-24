@@ -3,4 +3,5 @@ virt/
 .pytest_cache
 __pycache__/
 context/
-.cursor
+.cursor/
+app.log
