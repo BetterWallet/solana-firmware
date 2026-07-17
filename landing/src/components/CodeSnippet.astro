@@ -1,0 +1,106 @@
+---
+// Real Wallet.sign dispatcher from wallet/__init__.py — the single
+// chain-aware entry point that routes by request type. Set in mono with
+// line numbers and margin annotations.
+
+interface Line {
+  n: number;
+  text: string;
+}
+
+const lines: Line[] = [
+  { n: 35, text: '    def sign(self, request: SolSignRequest):' },
+  { n: 36, text: '        if not isinstance(request, SolSignRequest):' },
+  { n: 37, text: '            raise ValueError(f"unsupported sign request type: {type(request).__name__}")' },
+  { n: 38, text: '' },
+  { n: 39, text: '        account_index = _account_index_from_path(request.derivation_path)' },
+  { n: 40, text: '        account = next((entry for entry in self.sol_accounts if int(entry["index"]) == account_index), None)' },
+  { n: 41, text: '        if account is None:' },
+  { n: 42, text: '            raise ValueError("requested signer derivation path is not available on this device")' },
+  { n: 43, text: '' },
+  { n: 44, text: '        if request.address:' },
+  { n: 45, text: '            requested_address = _derive.sol_bytes_to_address(request.address)' },
+  { n: 46, text: '            if requested_address != account["public_key"]:' },
+  { n: 47, text: '                raise ValueError("requested signer pubkey does not match derivation path")' },
+  { n: 48, text: '' },
+  { n: 49, text: '        signing_key = _derive.derive_sol_signing_key(self._mnemonic, index=account_index)' },
+  { n: 50, text: '        return _sol.sign(signing_key, request)' },
+];
+
+function colorise(text: string): string {
+  let out = text
+    .replace(/^( +)/, (m) => `<span class="text-bone-deep">${m}</span>`)
+    .replace(/\b(def|if|return|raise|isinstance)\b/g, '<span class="text-warn">$1</span>')
+    .replace(/\b(SolSignRequest|ValueError|isinstance)\b/g, '<span class="text-signal">$1</span>')
+    .replace(/(#.+)$/, '<span class="text-bone-deep">$1</span>')
+    .replace(/(""".*?""")/g, '<span class="text-bone-deep">$1</span>');
+  return out;
+}
+---
+
+<section id="code" class="section relative border-b border-wire">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 04 / Source of truth</p>
+        <h2 class="display-lg mt-4">
+          One signer.
+          <span class="ital text-bone-mute">One Solana surface.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        Verbatim from <span class="font-mono text-bone">wallet/__init__.py</span>.
+        Every <span class="font-mono text-bone">SolSignRequest</span> passes through this
+        method: path checks, optional pubkey binding, then Ed25519 signing. Anything else
+        is a bug.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-y-3 lg:grid-cols-[1fr_240px] lg:gap-x-8">
+      <!-- code block -->
+      <div class="frame frame-cropped overflow-hidden">
+        <div class="flex items-center justify-between border-b border-wire bg-ink-2 px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-meta">
+          <div class="flex items-center gap-3 text-bone-mute">
+            <span class="text-signal">●</span>
+            <span class="text-bone">wallet/__init__.py</span>
+            <span class="text-bone-deep">·</span>
+            <span>read-only</span>
+          </div>
+          <a
+            href="https://github.com/BetterWallet/solana-firmware/blob/main/wallet/__init__.py"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-bone-mute hover:text-bone"
+          >view raw ↗</a>
+        </div>
+
+        <pre class="overflow-x-auto px-4 py-5 font-mono text-[12.5px] leading-[1.65]"><code>{lines.map(({ n, text }) => (
+  <div class="grid grid-cols-[40px_1fr]">
+    <span class="select-none text-right pr-4 text-bone-deep">{n}</span>
+    <span set:html={colorise(text || ' ')}></span>
+  </div>
+))}</code></pre>
+      </div>
+
+      <!-- annotations rail -->
+      <aside class="space-y-5 self-stretch lg:pt-2">
+        <div class="border-l-2 border-signal pl-4">
+          <p class="spec-label">sol path</p>
+          <p class="mt-2 text-[13px] leading-[1.55] text-bone">
+            <span class="font-mono text-bone-mute">SolSignRequest</span> →
+            <span class="font-mono text-bone-mute">wallet.sol.sign</span> →
+            64-byte <span class="font-mono">Ed25519</span> signature.
+          </p>
+        </div>
+        <div class="border-l-2 border-bone-deep pl-4">
+          <p class="spec-label">boundary</p>
+          <p class="mt-2 text-[13px] leading-[1.55] text-bone-mute">
+            Only <span class="font-mono">state/machine.py</span> may import
+            <span class="font-mono">wallet/</span>. The mnemonic lives in this
+            class and nowhere else.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

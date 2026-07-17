@@ -1,0 +1,226 @@
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --grain-opacity: 0.025;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: theme('colors.ink.DEFAULT');
+    color: theme('colors.bone.DEFAULT');
+    font-family: theme('fontFamily.sans');
+    font-size: 15px;
+    line-height: 1.55;
+    font-weight: 400;
+    position: relative;
+  }
+
+  /* fine grain texture over the whole page */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  ::selection {
+    background: theme('colors.signal.DEFAULT');
+    color: theme('colors.ink.DEFAULT');
+  }
+
+  h1, h2, h3, h4 {
+    font-family: theme('fontFamily.display');
+    font-weight: 400;
+    color: theme('colors.bone.DEFAULT');
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  a { transition: color 150ms, opacity 150ms, border-color 150ms; }
+}
+
+@layer components {
+  /* ─── layout ────────────────────────────────────────────────────────── */
+  .container-page {
+    @apply mx-auto w-full max-w-content px-6 sm:px-10;
+  }
+
+  .section {
+    @apply relative;
+    padding-block: clamp(5rem, 10vw, 9rem);
+  }
+
+  .rule {
+    @apply h-px w-full bg-wire;
+  }
+
+  /* ─── tokens / labels ────────────────────────────────────────────── */
+  .spec-label {
+    @apply font-mono uppercase text-bone-dim;
+    font-size: 10.5px;
+    letter-spacing: theme('letterSpacing.spec');
+  }
+
+  .meta-label {
+    @apply font-mono uppercase text-bone-mute;
+    font-size: 11px;
+    letter-spacing: theme('letterSpacing.meta');
+  }
+
+  .section-no {
+    @apply font-mono text-bone-dim;
+    font-size: 11px;
+    letter-spacing: theme('letterSpacing.spec');
+  }
+
+  /* ─── typography ────────────────────────────────────────────────── */
+  .display-xl {
+    font-family: theme('fontFamily.display');
+    font-size: clamp(3rem, 8.5vw, 7.25rem);
+    line-height: 0.96;
+    letter-spacing: -0.02em;
+  }
+
+  .display-lg {
+    font-family: theme('fontFamily.display');
+    font-size: clamp(2.25rem, 5.2vw, 4.25rem);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+  }
+
+  .display-md {
+    font-family: theme('fontFamily.display');
+    font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .ital { font-style: italic; }
+
+  /* ─── buttons ───────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-mono uppercase;
+    font-size: 11.5px;
+    letter-spacing: theme('letterSpacing.meta');
+    padding: 0.7rem 1.1rem;
+    border: 1px solid;
+    transition: all 160ms cubic-bezier(.4,0,.2,1);
+  }
+
+  .btn-primary {
+    @apply btn bg-signal text-ink border-signal;
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: theme('colors.signal.DEFAULT');
+    box-shadow: 0 0 0 1px theme('colors.signal.DEFAULT'), 0 0 30px -8px theme('colors.signal.glow');
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-bone border-wire-hi;
+  }
+  .btn-ghost:hover {
+    border-color: theme('colors.bone.DEFAULT');
+    color: theme('colors.bone.DEFAULT');
+  }
+
+  /* ─── frames / cards ───────────────────────────────────────────── */
+  .frame {
+    border: 1px solid theme('colors.wire.DEFAULT');
+    background: rgba(237, 231, 216, 0.015);
+    position: relative;
+  }
+
+  /* corner crops on frames — engineering-drawing detail */
+  .frame-cropped::before,
+  .frame-cropped::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid theme('colors.signal.DEFAULT');
+  }
+  .frame-cropped::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .frame-cropped::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  /* tight technical grid */
+  .gridlines {
+    background-image:
+      linear-gradient(theme('colors.wire.DEFAULT') 1px, transparent 1px),
+      linear-gradient(90deg, theme('colors.wire.DEFAULT') 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ─── status indicators ─────────────────────────────────────────── */
+  .led {
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background: theme('colors.signal.DEFAULT');
+    box-shadow: 0 0 10px theme('colors.signal.glow');
+  }
+
+  .caret {
+    display: inline-block;
+    width: 0.5em;
+    height: 1em;
+    background: theme('colors.signal.DEFAULT');
+    vertical-align: -0.15em;
+  }
+}
+
+@layer utilities {
+  .text-bone-grad {
+    background: linear-gradient(180deg, #FFFAEB 0%, #C9C4B6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .ink-vignette {
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 0%, rgba(51,232,200,0.05), transparent 70%),
+      radial-gradient(ellipse 90% 60% at 50% 100%, rgba(255,107,61,0.03), transparent 70%);
+  }
+
+  /* dotted leader line for callouts (engineering drawing) */
+  .leader {
+    background-image: linear-gradient(90deg, theme('colors.signal.DEFAULT') 33%, transparent 0);
+    background-size: 6px 1px;
+    background-repeat: repeat-x;
+    background-position: 0 50%;
+    height: 1px;
+  }
+
+  .leader-y {
+    background-image: linear-gradient(0deg, theme('colors.signal.DEFAULT') 33%, transparent 0);
+    background-size: 1px 6px;
+    background-repeat: repeat-y;
+    background-position: 50% 0;
+    width: 1px;
+  }
+}

@@ -1,0 +1,52 @@
+---
+import GitHubStarBadge from './ui/GitHubStarBadge.astro';
+---
+
+<section class="relative overflow-hidden border-b border-wire">
+  <div
+    class="pointer-events-none absolute inset-0"
+    style="background:
+      radial-gradient(ellipse 60% 70% at 50% 100%, rgba(51,232,200,0.10), transparent 70%),
+      radial-gradient(ellipse 30% 40% at 50% 100%, rgba(255,107,61,0.06), transparent 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-page relative">
+    <div class="grid gap-y-12 py-28 sm:py-36 lg:grid-cols-12">
+      <div class="lg:col-span-3">
+        <p class="section-no">§ 09 / Coda</p>
+      </div>
+      <div class="lg:col-span-9">
+        <h2 class="display-xl">
+          Don't trust.<br/>
+          <span class="ital text-bone-mute">Verify.</span><br/>
+          <span class="text-signal">Then build it.</span>
+        </h2>
+
+        <p class="mt-10 max-w-prose font-sans text-[16px] leading-[1.7] text-bone-mute">
+          The repository is the source of truth. The website is the menu;
+          the menu is not the meal. Star it, fork it, audit it, build it.
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <a
+            href="https://github.com/BetterWallet/solana-firmware"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary"
+          >
+            View on GitHub
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            href="/docs"
+            class="btn-ghost"
+          >
+            Read the docs
+          </a>
+          <span class="ml-2"><GitHubStarBadge /></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

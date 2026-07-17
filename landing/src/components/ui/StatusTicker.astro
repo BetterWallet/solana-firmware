@@ -1,0 +1,102 @@
+---
+// Live-feeling state-machine ticker. Pure CSS animation.
+// Each line cycles through several values to make the box feel alive.
+
+const lines: { proc: string; states: string[] }[] = [
+  {
+    proc: 'camera_loop',
+    states: [
+      'idle · awaiting UR frame',
+      'frame 03 / 24 · part 0x4a',
+      'frame 11 / 24 · part 0x9c',
+      'frame 24 / 24 · reassembled',
+    ],
+  },
+  {
+    proc: 'state_machine',
+    states: [
+      'READY',
+      'PARSE_REQUEST · sol-sign-request',
+      'AWAIT_CONFIRM · gpio',
+      'SIGNING · sol · ed25519',
+      'EMIT_SIGNATURE · ur:sol-signature',
+      'DISPLAYING · fountain part 08/24',
+      'DISPLAYING · fountain part 16/24',
+    ],
+  },
+  {
+    proc: 'sol_parser',
+    states: [
+      'idle',
+      'tx · legacy message',
+      'tx · v0 · 1 sig',
+      'msg · off-chain utf-8',
+      'idle',
+    ],
+  },
+  {
+    proc: 'display_loop',
+    states: [
+      'rendering home',
+      'rendering tx detail',
+      'rendering signature QR · part 02',
+      'rendering signature QR · part 12',
+    ],
+  },
+  {
+    proc: 'gpio_loop',
+    states: [
+      'listening · pin 17 · pin 27',
+      'pin 17 high · CONFIRM',
+      'listening · pin 17 · pin 27',
+    ],
+  },
+];
+---
+
+<div class="frame frame-cropped relative">
+  <!-- header bar -->
+  <div class="flex items-center justify-between border-b border-wire px-4 py-2.5">
+    <div class="flex items-center gap-2.5 font-mono text-[10.5px] uppercase tracking-meta text-bone-mute">
+      <span class="led animate-pulse_dot"></span>
+      <span>SYS&nbsp;STATUS</span>
+      <span class="text-bone-deep">/</span>
+      <span class="text-signal">AIR-GAPPED</span>
+    </div>
+    <div class="font-mono text-[10.5px] tracking-meta text-bone-deep">RT 00:00:13.27</div>
+  </div>
+
+  <!-- lines -->
+  <div class="px-4 py-3 font-mono text-[12px]">
+    {lines.map(({ proc, states }, i) => (
+      <div class="grid grid-cols-[140px_1fr] items-baseline py-[3px]">
+        <span class="text-bone-mute">{proc}</span>
+        <span class="relative h-[1.4em] overflow-hidden">
+          {states.map((s, j) => (
+            <span
+              class="absolute inset-0 text-bone"
+              style={`animation: ticker ${states.length * 1.4}s steps(1, end) infinite; animation-delay: ${(j * 1.4 - i * 0.18).toFixed(2)}s; opacity: 0;`}
+            >
+              {s}
+            </span>
+          ))}
+          <!-- placeholder so height is reserved during SSR -->
+          <span class="invisible">{states[0]}</span>
+        </span>
+      </div>
+    ))}
+    <!-- prompt line with caret -->
+    <div class="grid grid-cols-[140px_1fr] items-baseline pt-3 pb-0.5 text-bone-mute">
+      <span>&gt; bw-pi</span>
+      <span class="text-bone">await scan<span class="caret ml-1 animate-blink"></span></span>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @keyframes ticker {
+    0%, 14%   { opacity: 0; transform: translateY(6px); }
+    18%, 82%  { opacity: 1; transform: translateY(0); }
+    86%, 100% { opacity: 0; transform: translateY(-6px); }
+  }
+</style>

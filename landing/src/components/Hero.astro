@@ -1,0 +1,110 @@
+---
+import DeviceMockup from './ui/DeviceMockup.astro';
+import StatusTicker from './ui/StatusTicker.astro';
+
+const today = new Date().toISOString().slice(0, 10);
+---
+
+<section class="relative overflow-hidden border-b border-wire">
+  <!-- subtle grid overlay -->
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.5]"
+    style="
+      background-image:
+        linear-gradient(rgba(237,231,216,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(237,231,216,0.045) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent 75%);
+    "
+    aria-hidden="true"
+  ></div>
+  <!-- top phosphor wash -->
+  <div
+    class="pointer-events-none absolute inset-x-0 top-0 h-[640px]"
+    style="background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(51,232,200,0.08), transparent 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <!-- meta header strip — looks like a document header -->
+  <div class="container-page relative">
+    <div class="grid grid-cols-2 gap-3 border-b border-wire py-3 font-mono text-[10.5px] uppercase tracking-meta text-bone-mute sm:grid-cols-4">
+      <div><span class="text-bone-deep">Doc</span> &nbsp;BW-PI / SPEC&nbsp;0.1</div>
+      <div><span class="text-bone-deep">Issue</span> &nbsp;{today}</div>
+      <div><span class="text-bone-deep">Class</span> &nbsp;Reference design</div>
+      <div class="sm:text-right">
+        <span class="text-bone-deep">Status</span> &nbsp;
+        <span class="text-signal">PROTOTYPE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-page relative grid items-end gap-y-16 pt-16 pb-20 sm:pt-24 sm:pb-28 lg:grid-cols-12 lg:gap-x-12">
+    <!-- LEFT — copy column -->
+    <div class="lg:col-span-7">
+      <p class="meta-label flex items-center gap-2.5">
+        <span class="led"></span>
+        Open-source · Solana-first · Air-gapped · Raspberry Pi
+      </p>
+
+      <h1 class="display-xl mt-8 text-bone-grad">
+        A Solana wallet
+        <span class="block">that <span class="ital text-signal">cannot</span></span>
+        <span class="block">connect to anything.</span>
+      </h1>
+
+      <p class="mt-10 max-w-prose font-sans text-[17px] leading-[1.65] text-bone-mute">
+        Better Wallet Pi is a buildable reference design for signing
+        <span class="text-bone">Solana</span> via Keystone-style UR requests over QR —
+        never over the wire. The online wallet shows an animated
+        <span class="font-mono text-bone">ur:sol-sign-request</span>; the Pi scans it,
+        renders the transaction or message for review, signs offline at
+        <span class="font-mono text-bone">m/44'/501'/i'</span>, and returns
+        <span class="font-mono text-bone">ur:sol-signature</span> by QR. No driver. No
+        data cable. No background sync.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        <a
+          href="/docs"
+          class="btn-primary"
+        >
+          Read the docs
+          <span aria-hidden="true">→</span>
+        </a>
+        <a href="#chains" class="btn-ghost">
+          See Solana flow
+          <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+
+      <!-- hard numbers strip -->
+      <dl class="mt-12 grid max-w-xl grid-cols-3 border-t border-wire pt-7">
+        <div class="border-r border-wire pr-5">
+          <dt class="spec-label">Primary path</dt>
+          <dd class="mt-1 font-mono text-[13px] leading-snug text-bone">
+            <span class="text-signal">●</span> Solana (Keystone UR)
+          </dd>
+        </div>
+        <div class="border-r border-wire px-5">
+          <dt class="spec-label">Network surface</dt>
+          <dd class="display-md mt-1 tabular-nums">0<span class="text-bone-deep"> / 0</span></dd>
+        </div>
+        <div class="pl-5">
+          <dt class="spec-label">Standards</dt>
+          <dd class="mt-1 font-mono text-[12px] leading-snug text-bone">
+            BC-UR · Keystone Solana<br/>
+            SLIP-10 · BIP-39
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- RIGHT — device drawing + ticker -->
+    <div class="lg:col-span-5">
+      <DeviceMockup />
+      <div class="mt-10">
+        <StatusTicker />
+      </div>
+    </div>
+  </div>
+</section>

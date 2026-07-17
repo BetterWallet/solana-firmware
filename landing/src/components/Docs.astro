@@ -1,0 +1,125 @@
+---
+const quickstart = [
+  {
+    no: '01',
+    title: 'Assemble the reference build',
+    body: 'Use a Raspberry Pi 4 for development, or a CM4 no-wireless board for the stricter production shape. Add the 3.5 inch SPI display, Pi Camera Module, and two momentary buttons wired to GPIO 17 and GPIO 27.',
+    pin: 'Pi + display + camera + buttons',
+  },
+  {
+    no: '02',
+    title: 'Remove the radios',
+    body: 'Disable WiFi and Bluetooth in the Pi boot config before trusting the device boundary. The wallet should be able to see QR codes and show QR codes, but it should not be able to speak TCP/IP.',
+    pin: 'dtoverlay=disable-wifi / disable-bt',
+  },
+  {
+    no: '03',
+    title: 'Install and run',
+    body: 'Create a Python virtual environment, install the project dependencies, then run main.py on the Pi. On first boot the device generates one 12-word mnemonic, asks for a PIN, and shows the account QR.',
+    pin: 'python main.py',
+  },
+  {
+    no: '04',
+    title: 'Sign Solana via Keystone UR',
+    body: 'Use a compatible wallet (e.g. Solflare with Keystone Solana) to show `ur:sol-sign-request`. The Pi fountain-decodes the QR, shows the parsed intent, and returns `ur:sol-signature` as animated QRs.',
+    pin: 'ur:sol-sign-request',
+  },
+];
+
+const snippets = [
+  {
+    label: 'Disable wireless',
+    code: `# /boot/firmware/config.txt
+dtoverlay=disable-wifi
+dtoverlay=disable-bt`,
+  },
+  {
+    label: 'Local development',
+    code: `python3 -m venv virt
+source virt/bin/activate
+pip install -r requirements.txt
+pytest tests/ -v`,
+  },
+  {
+    label: 'Pi runtime',
+    code: `source virt/bin/activate
+python main.py`,
+  },
+];
+
+const ops = [
+  'Write the 12 seed words down offline. They are the only backup.',
+  'Use testnet funds while validating a fresh build.',
+  'Review the Solana transaction or message summary on the Pi display before pressing SIGN.',
+  'Keep wallet/ as the only package that touches key material.',
+  'Broadcast only from the online computer after scanning the signed QR.',
+];
+---
+
+<section id="docs" class="section relative border-b border-wire bg-ink-1">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">Manual</p>
+        <h2 class="display-lg mt-4">
+          Build a Solana-first
+          <span class="ital text-bone-mute">offline signer.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        The repository README remains the full manual. This is the short path:
+        what to wire, what to disable, how Solana UR requests move through the scanner,
+        and what never crosses the air gap.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-x-px gap-y-px overflow-hidden border border-wire bg-wire md:grid-cols-2 lg:grid-cols-4">
+      {quickstart.map(({ no, title, body, pin }) => (
+        <article class="flex min-h-[260px] flex-col bg-ink-1 p-6">
+          <div class="flex items-center justify-between">
+            <p class="font-mono text-[11px] uppercase tracking-meta text-signal">{no}</p>
+            <p class="font-mono text-[10.5px] uppercase tracking-meta text-bone-deep">{pin}</p>
+          </div>
+          <h3 class="display-md mt-5">{title}</h3>
+          <p class="mt-4 text-[14px] leading-[1.65] text-bone-mute">{body}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <div class="frame frame-cropped overflow-hidden">
+        <div class="flex items-center justify-between border-b border-wire bg-ink-2 px-4 py-2.5">
+          <p class="meta-label text-bone">Command ledger</p>
+          <a
+            href="https://github.com/BetterWallet/solana-firmware#hardware"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-mono text-[11px] uppercase tracking-meta text-bone-mute hover:text-bone"
+          >
+            Full README ↗
+          </a>
+        </div>
+        <div class="divide-y divide-wire">
+          {snippets.map(({ label, code }) => (
+            <div class="grid gap-y-3 px-4 py-5 md:grid-cols-[170px_1fr] md:gap-x-6">
+              <p class="meta-label text-bone-deep">{label}</p>
+              <pre class="overflow-x-auto font-mono text-[12.5px] leading-[1.65] text-bone"><code>{code}</code></pre>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <aside class="self-start border-y border-wire py-6">
+        <p class="meta-label text-bone">Operating checklist</p>
+        <ol class="mt-5 space-y-4">
+          {ops.map((item, i) => (
+            <li class="grid grid-cols-[34px_1fr] gap-x-3">
+              <span class="font-mono text-[11px] uppercase tracking-meta text-bone-deep">{String(i + 1).padStart(2, '0')}</span>
+              <span class="text-[14px] leading-[1.6] text-bone-mute">{item}</span>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>

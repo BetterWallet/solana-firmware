@@ -1,0 +1,91 @@
+---
+// Solana chain datasheet — UR transport and derivation in one place.
+
+const col = {
+  label: 'Solana',
+  spec: '/sol',
+  rows: [
+    { k: 'Curve', v: 'Ed25519' },
+    { k: 'Derivation', v: 'SLIP-10 · m/44\'/501\'/{i}\'' },
+    {
+      k: 'Payload',
+      v: 'versioned transaction or off-chain message (wallet-supplied bytes)',
+    },
+    {
+      k: 'Transport',
+      v: 'Keystone Solana UR · BC-UR fountain QR (ur:sol-sign-request)',
+    },
+    {
+      k: 'Compatible',
+      v: 'Solflare (Keystone flow) · Phantom (if Keystone Solana is exposed)',
+    },
+    { k: 'Out', v: 'ur:sol-signature (animated QR)' },
+  ],
+};
+---
+
+<section id="chains" class="section relative border-b border-wire bg-ink-1">
+  <div class="container-page">
+    <div class="grid items-end gap-y-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="section-no">§ 03 / Chain</p>
+        <h2 class="display-lg mt-4">
+          Solana first.
+          <span class="ital text-bone-mute">Air gap always.</span>
+          <span class="block text-bone-mute">Keystone UR in. Signature UR out.</span>
+          <span class="block text-signal">No network stack.</span>
+        </h2>
+      </div>
+      <p class="font-sans text-[15px] leading-[1.7] text-bone-mute lg:col-span-5">
+        The firmware speaks Keystone-style Solana sign requests: scan an animated
+        <span class="font-mono text-bone">ur:sol-sign-request</span>, confirm on-device,
+        and show <span class="font-mono text-bone">ur:sol-signature</span> for the online
+        wallet to finish broadcast.
+      </p>
+    </div>
+
+    <div class="mx-auto mt-14 max-w-3xl overflow-hidden border border-wire bg-wire">
+      <div class="bg-ink-1">
+        <header class="flex items-center justify-between border-b border-wire px-6 py-4">
+          <div class="flex items-baseline gap-3">
+            <span
+              class="h-1.5 w-1.5 translate-y-[-2px] rounded-full bg-signal shadow-[0_0_10px_rgba(51,232,200,0.55)]"
+            ></span>
+            <h3 class="display-md">{col.label}</h3>
+          </div>
+          <span class="font-mono text-[10.5px] uppercase tracking-meta text-signal">
+            {col.spec}
+          </span>
+        </header>
+
+        <dl class="divide-y divide-wire">
+          {col.rows.map(({ k, v }) => (
+            <div class="grid grid-cols-[110px_1fr] gap-x-4 px-6 py-3.5">
+              <dt class="meta-label text-bone-deep">{k}</dt>
+              <dd class="font-mono text-[12.5px] text-bone">{v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-[80px_1fr_auto]">
+      <p class="meta-label text-warn">A note</p>
+      <p class="max-w-prose font-sans text-[14px] leading-[1.65] text-bone-mute">
+        Solflare supports this device as a Keystone-class Solana signer today. Phantom
+        compatibility depends on the extension exposing the same Keystone Solana UR path —
+        the firmware side is aligned with <span class="font-mono text-bone">ur:sol-sign-request</span>
+        / <span class="font-mono text-bone">ur:sol-signature</span>. Start with devnet or a
+        throwaway mainnet key until you trust your build.
+      </p>
+      <a
+        href="https://docs.solanalabs.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="self-start font-mono text-[11px] uppercase tracking-meta text-bone-mute hover:text-bone"
+      >
+        Solana docs ↗
+      </a>
+    </div>
+  </div>
+</section>
